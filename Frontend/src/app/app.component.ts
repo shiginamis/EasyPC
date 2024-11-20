@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
@@ -7,6 +9,22 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+ 
+  http = inject(HttpClient);
   title = 'EasyPC';
+  users:any;
+
+  ngOnInit(): void 
+  {
+    this.http.get("http://localhost:5271/api/users")
+              .subscribe(
+                {
+                  next: response => this.users = response,
+                  error: error => console.log(error),
+                  complete: () => console.log("Request has completed")
+                }
+              );
+  }
+
 }
