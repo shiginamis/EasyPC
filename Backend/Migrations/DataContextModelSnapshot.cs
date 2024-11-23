@@ -55,16 +55,11 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProductsId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductsId");
 
                     b.ToTable("Cases");
                 });
@@ -124,16 +119,11 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProductsId")
-                        .HasColumnType("int");
-
                     b.Property<string>("VRAM")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductsId");
 
                     b.ToTable("Graphics_Cards");
                 });
@@ -150,9 +140,6 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProductsId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Socket")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -161,8 +148,6 @@ namespace Backend.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductsId");
 
                     b.ToTable("Motherboards");
                 });
@@ -188,8 +173,8 @@ namespace Backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal?>("Discounts")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int?>("Discounts")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
@@ -202,8 +187,8 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("TotalPrice")
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -225,12 +210,7 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProductsId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductsId");
 
                     b.ToTable("PSUs");
                 });
@@ -266,10 +246,7 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("ProductsId")
+                    b.Property<int>("Price")
                         .HasColumnType("int");
 
                     b.Property<string>("Socket")
@@ -284,22 +261,7 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductsId");
-
                     b.ToTable("Processors");
-                });
-
-            modelBuilder.Entity("Backend.Models.Products", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Backend.Models.QuantityInStock", b =>
@@ -347,16 +309,11 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProductsId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductsId");
 
                     b.ToTable("RAMs");
                 });
@@ -393,63 +350,6 @@ namespace Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Backend.Models.Case", b =>
-                {
-                    b.HasOne("Backend.Models.Products", null)
-                        .WithMany("Cases")
-                        .HasForeignKey("ProductsId");
-                });
-
-            modelBuilder.Entity("Backend.Models.Graphics_Card", b =>
-                {
-                    b.HasOne("Backend.Models.Products", null)
-                        .WithMany("Graphics_Card")
-                        .HasForeignKey("ProductsId");
-                });
-
-            modelBuilder.Entity("Backend.Models.Motherboard", b =>
-                {
-                    b.HasOne("Backend.Models.Products", null)
-                        .WithMany("Motherboards")
-                        .HasForeignKey("ProductsId");
-                });
-
-            modelBuilder.Entity("Backend.Models.PSU", b =>
-                {
-                    b.HasOne("Backend.Models.Products", null)
-                        .WithMany("PSUs")
-                        .HasForeignKey("ProductsId");
-                });
-
-            modelBuilder.Entity("Backend.Models.Processor", b =>
-                {
-                    b.HasOne("Backend.Models.Products", null)
-                        .WithMany("Processors")
-                        .HasForeignKey("ProductsId");
-                });
-
-            modelBuilder.Entity("Backend.Models.RAM", b =>
-                {
-                    b.HasOne("Backend.Models.Products", null)
-                        .WithMany("RAMs")
-                        .HasForeignKey("ProductsId");
-                });
-
-            modelBuilder.Entity("Backend.Models.Products", b =>
-                {
-                    b.Navigation("Cases");
-
-                    b.Navigation("Graphics_Card");
-
-                    b.Navigation("Motherboards");
-
-                    b.Navigation("PSUs");
-
-                    b.Navigation("Processors");
-
-                    b.Navigation("RAMs");
                 });
 #pragma warning restore 612, 618
         }

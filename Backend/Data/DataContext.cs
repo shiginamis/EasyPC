@@ -23,6 +23,5 @@ public class DataContext(DbContextOptions options) : DbContext(options)
     public DbSet<Custom_PC> Custom_PCs {get;set;}
     public DbSet<Configuration_Recommendations> Configuration_Recommendations {get;set;}
     public DbSet<Category> Categories {get;set;}
-     public DbSet<Products> Products {get;set;}
 }
 

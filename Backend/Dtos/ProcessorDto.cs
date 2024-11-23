@@ -1,8 +1,8 @@
 using System;
 
-namespace Backend.Models;
+namespace Backend.Dtos;
 
-public class Processor
+public class ProcessorDto
 {
     public int Id { get; set; }
     public  string Name { get; set; }
