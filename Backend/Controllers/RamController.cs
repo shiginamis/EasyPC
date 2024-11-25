@@ -31,7 +31,8 @@ public class RamController(DataContext context) : BaseApiController
         var ram = new RAM
         {
             Name = ramDto.Name,
-            Type = ramDto.Type
+            Type = ramDto.Type,
+            Speed = ramDto.Speed
         };
 
         if (ram.Name.Length < 3 )
