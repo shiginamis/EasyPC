@@ -1,5 +1,6 @@
 using System;
 using Backend.Data;
+using Backend.Dtos;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,7 @@ public class GraphicsCardController(DataContext context) : BaseApiController
  public async Task<ActionResult<Graphics_Card>> Register(Graphics_Card graphics_CardDto)
     {
 
-        if (await Exists(graphics_CardDto.Name))
+        if (await Exists(graphics_CardDto.Name!))
         {
             return BadRequest("Name is taken");
         }
@@ -33,10 +34,10 @@ public class GraphicsCardController(DataContext context) : BaseApiController
             VRAM = graphics_CardDto.VRAM
         };
 
-        if (graphicsCard.Name.Length < 3 )
+        if (graphicsCard.Name!.Length < 3 )
             return BadRequest("Name too short");
 
-        else if(graphicsCard.VRAM.Length < 3)
+        else if(graphicsCard.VRAM!.Length < 3)
             return BadRequest("Input not valid");
 
         context.Graphics_Cards.Add(graphicsCard);
@@ -46,10 +47,38 @@ public class GraphicsCardController(DataContext context) : BaseApiController
         return graphicsCard;
     }
 
+      [HttpDelete("{id}")]
+    public async Task<ActionResult<Graphics_Card>> Delete(int id)
+    {
+
+        var item = await context.Graphics_Cards.FindAsync(id);
+        if(item == null) return NotFound("Cant find product with this ID");
+
+        context.Graphics_Cards.Remove(item);
+        await context.SaveChangesAsync();
+
+        return Ok(item);
+    }
+
+
+
+   [HttpPut("{id}")] 
+    public async Task<ActionResult<Graphics_Card>> Update(int id,GraphicsCardDto dto)
+    {
+        var item = await context.Graphics_Cards.FindAsync(id);
+        if(item == null) return NotFound("Cant find product with this ID");
+
+        item.Name = dto.Name?? item.Name;
+        item.VRAM = dto.VRAM?? item.VRAM;
+
+        await context.SaveChangesAsync();
+        return Ok();
+    }
+
 
     private async Task<bool> Exists(string productName)
     {
-        return await context.Graphics_Cards.AnyAsync(x => x.Name.ToLower() == productName.ToLower());
+        return await context.Graphics_Cards.AnyAsync(x => x.Name!.ToLower() == productName.ToLower());
     }
  
 }

@@ -47,10 +47,39 @@ public class ProcessorController(DataContext context): BaseApiController
         return processor;
     }
 
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Processor>> Delete(int id)
+    {
+
+        var item = await context.Processors.FindAsync(id);
+        if(item == null) return NotFound("Cant find product with this ID");
+
+        
+        context.Processors.Remove(item);
+        await context.SaveChangesAsync();
+
+        return Ok(item);
+    }
+
+
+
+   [HttpPut("{id}")] 
+    public async Task<ActionResult<Processor>> Update(int id,ProcessorDto dto)
+    {
+        var processor = await context.Processors.FindAsync(id);
+        if(processor == null) return NotFound("Cant find product with this ID");
+
+        processor.Name = dto.Name?? processor.Name;
+        processor.Socket = dto.Socket?? processor.Socket;
+
+        await context.SaveChangesAsync();
+        return Ok();
+    }
+
 
     private async Task<bool> ProcessorExists(string productName)
     {
-        return await context.Processors.AnyAsync(x => x.Name.ToLower() == productName.ToLower());
+        return await context.Processors.AnyAsync(x => x.Name!.ToLower() == productName.ToLower());
     }
  
 }

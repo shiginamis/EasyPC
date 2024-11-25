@@ -47,10 +47,39 @@ public class MotherboardController(DataContext context) : BaseApiController
         return motherBoard;
     }
 
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<Motherboard>> Delete(int id)
+    {
+
+        var item = await context.Motherboards.FindAsync(id);
+        if(item == null) return NotFound("Cant find product with this ID");
+
+        context.Motherboards.Remove(item);
+        await context.SaveChangesAsync();
+
+        return Ok(item);
+    }
+
+
+
+   [HttpPut("{id}")] 
+    public async Task<ActionResult<Motherboard>> Update(int id,MotherBoardDto dto)
+    {
+        var item = await context.Motherboards.FindAsync(id);
+        if(item == null) return NotFound("Cant find product with this ID");
+
+        item.Name = dto.Name?? item.Name;
+        item.Socket = dto.Socket?? item.Socket;
+        
+
+        await context.SaveChangesAsync();
+        return Ok();
+    }
+
 
     private async Task<bool> Exists(string productName)
     {
-        return await context.Motherboards.AnyAsync(x => x.Name.ToLower() == productName.ToLower());
+        return await context.Motherboards.AnyAsync(x => x.Name!.ToLower() == productName.ToLower());
     }
  
 }

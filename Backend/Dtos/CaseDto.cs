@@ -4,8 +4,6 @@ namespace Backend.Dtos;
 
 public class CaseDto
 {
-    public int Id { get; set; }
-    public  string Name { get; set; }
-    public  string Type { get; set; }
-    public string Size { get; set; }
+    public required string Name { get; set; }
+    public required string Type { get; set; }
 }

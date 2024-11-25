@@ -47,10 +47,39 @@ public class PSUController(DataContext context) : BaseApiController
         return PSU;
     }
 
+     [HttpDelete("{id}")]
+    public async Task<ActionResult<PSU>> Delete(int id)
+    {
+
+        var item = await context.PSUs.FindAsync(id);
+        if(item == null) return NotFound("Cant find product with this ID");
+
+        
+        context.PSUs.Remove(item);
+        await context.SaveChangesAsync();
+
+        return Ok(item);
+    }
+
+
+
+   [HttpPut("{id}")] 
+    public async Task<ActionResult<PSU>> Update(int id,PsuDto dto)
+    {
+        var item = await context.PSUs.FindAsync(id);
+        if(item == null) return NotFound("Cant find product with this ID");
+
+        item.Name = dto.Name?? item.Name;
+        item.Power = dto.Power?? item.Power;
+
+        await context.SaveChangesAsync();
+        return Ok();
+    }
+
 
     private async Task<bool> Exists(string productName)
     {
-        return await context.PSUs.AnyAsync(x => x.Name.ToLower() == productName.ToLower());
+        return await context.PSUs.AnyAsync(x => x.Name!.ToLower() == productName.ToLower());
     }
  
 }

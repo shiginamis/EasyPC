@@ -47,9 +47,37 @@ public class CaseController(DataContext context): BaseApiController
         return Case;
     }
 
+      [HttpDelete("{id}")]
+    public async Task<ActionResult<Case>> Delete(int id)
+    {
+
+        var item = await context.Cases.FindAsync(id);
+        if(item == null) return NotFound("Cant find product with this ID");
+
+        context.Cases.Remove(item);
+        await context.SaveChangesAsync();
+
+        return Ok(item);
+    }
+
+
+
+   [HttpPut("{id}")] 
+    public async Task<ActionResult<Case>> Update(int id,CaseDto dto)
+    {
+        var item = await context.Cases.FindAsync(id);
+        if(item == null) return NotFound("Cant find product with this ID");
+
+        item.Name = dto.Name?? item.Name;
+        item.Type = dto.Type?? item.Type;
+
+        await context.SaveChangesAsync();
+        return Ok();
+    }
+
 
     private async Task<bool> Exists(string productName)
     {
-        return await context.Cases.AnyAsync(x => x.Name.ToLower() == productName.ToLower());
+        return await context.Cases.AnyAsync(x => x.Name!.ToLower() == productName.ToLower());
     }
 }

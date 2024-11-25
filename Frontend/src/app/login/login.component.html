@@ -1,1 +1,11 @@
-<p>login works!</p>
+<p>not logget in!</p>
+
+@if(LoggedIn){
+<p>logged in!</p>
+}
+<form #loginForm="ngForm" (ngSubmit)="login()" class="login&Register">
+    <input name="username" [(ngModel)]="model.username" placeholder="Username">
+
+    <input name="password" [(ngModel)]="model.password" placeholder="Password" type="password">
+    <button type="submit">Login</button>
+</form>

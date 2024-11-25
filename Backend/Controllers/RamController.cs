@@ -21,9 +21,9 @@ public class RamController(DataContext context) : BaseApiController
  public async Task<ActionResult<RAM>> Register(RamDto ramDto)
     {
 
-        if (await Exists(ramDto.Name))
+        if (await Exists(ramDto))
         {
-            return BadRequest("Name is taken");
+            return BadRequest("Product exists");
         }
 
         if (ramDto == null) return BadRequest("Empty data");
@@ -48,10 +48,41 @@ public class RamController(DataContext context) : BaseApiController
         return ram;
     }
 
-
-    private async Task<bool> Exists(string productName)
+      [HttpDelete("{id}")]
+    public async Task<ActionResult<RAM>> Delete(int id)
     {
-        return await context.RAMs.AnyAsync(x => x.Name.ToLower() == productName.ToLower());
+
+        var item = await context.RAMs.FindAsync(id);
+        if(item == null) return NotFound("Cant find product with this ID");
+
+        
+        context.RAMs.Remove(item);
+        await context.SaveChangesAsync();
+
+        return Ok(item);
+    }
+
+
+
+   [HttpPut("{id}")] 
+    public async Task<ActionResult<RAM>> Update(int id,RamDto dto)
+    {
+        var item = await context.RAMs.FindAsync(id);
+        if(item == null) return NotFound("Cant find product with this ID");
+
+        item.Name = dto.Name?? item.Name;
+        item.Type = dto.Type?? item.Type;
+        item.Speed = dto.Speed?? item.Speed;
+        
+
+        await context.SaveChangesAsync();
+        return Ok();
+    }
+
+
+    private async Task<bool> Exists(RamDto ram)
+    {
+        return await context.RAMs.AnyAsync(x => x.Name!.ToLower() == ram.Name.ToLower() && x.Type!.ToLower() == ram.Type.ToLower());
     }
  
 }

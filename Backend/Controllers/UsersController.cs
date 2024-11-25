@@ -57,7 +57,6 @@ public class UsersController(DataContext context) : BaseApiController
         var user = await context.Users.FindAsync(id);
         if (user == null) return NotFound("No user with this ID");
         user.Username = userDto.Username ?? user.Username;
-        user.Password = userDto.Password ?? user.Password;
         await context.SaveChangesAsync();
         return Ok();
     }
