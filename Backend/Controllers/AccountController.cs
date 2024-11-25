@@ -15,7 +15,7 @@ public class AccountController(DataContext context) : BaseApiController
     public async Task<ActionResult<User>> Register(RegisterDto registerDto)
     {
 
-        if (await UserExists(registerDto.Username))
+        if (await Exists(registerDto.Username))
         {
             return BadRequest("Username is taken");
         }
@@ -42,7 +42,7 @@ public class AccountController(DataContext context) : BaseApiController
     }
 
 
-    private async Task<bool> UserExists(string username)
+    private async Task<bool> Exists(string username)
     {
         return await context.Users.AnyAsync(x => x.Username.ToLower() == username.ToLower());
     }

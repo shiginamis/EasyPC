@@ -14,7 +14,7 @@ public class AdminController(DataContext context):BaseApiController
     public async Task<ActionResult<Admin>> Register(RegisterDto registerDto)
     {
 
-        if (await AdminExists(registerDto.Username))
+        if (await Exists(registerDto.Username))
         {
             return BadRequest("Username is taken");
         }
@@ -41,7 +41,7 @@ public class AdminController(DataContext context):BaseApiController
     }
 
 
-    private async Task<bool> AdminExists(string username)
+    private async Task<bool> Exists(string username)
     {
         return await context.Admins.AnyAsync(x => x.Username.ToLower() == username.ToLower());
     }
