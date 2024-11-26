@@ -2,6 +2,8 @@
 
 <app-nav-bar></app-nav-bar>
 
+<link rel="stylesheet" href="home.component.css">
+
 <ul>
   @for (user of users; track user.id) {
     <li>
@@ -11,10 +13,12 @@
 </ul>
 
 <br>
+
 <select name="" id="">
   @for (user of users; track user.id) {
     <option>{{user.username}}</option>
   }
 </select>
 
+<h1>TEST</h1>
 
