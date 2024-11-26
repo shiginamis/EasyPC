@@ -11,15 +11,15 @@ import { AccountService } from '../services/account.service';
 export class LoginComponent {
   loggedIn = false;
   private accountService = inject(AccountService);
-  model:any = {};
+  body:any = {};
 
   login(){
-    this.accountService.login(this.model).subscribe({
+    this.accountService.login(this.body).subscribe({
       next: response => {
         console.log(response);
         this.loggedIn = true;
-        
-      }
+      },
+        error: error => console.log(error)
     })
   }
 }

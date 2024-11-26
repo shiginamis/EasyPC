@@ -4,17 +4,18 @@ using System.Text;
 using Azure;
 using Backend.Data;
 using Backend.Dtos;
+using Backend.Interfaces;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers;
 
-public class AccountController(DataContext context) : BaseApiController
+public class AccountController(DataContext context,ITokenService tokenService) : BaseApiController
 {
 
     [HttpPost("Register")]
-    public async Task<ActionResult<User>> Register(RegisterDto registerDto)
+    public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
         if (registerDto == null) return BadRequest("User data empty");
         if (await Exists(registerDto.Username))
@@ -37,10 +38,34 @@ public class AccountController(DataContext context) : BaseApiController
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
-        return user;
+        return new UserDto{
+            Username = user.Username,
+            Token = tokenService.CreateToken(user)
+        };
     }
 
+    [HttpPost("Login")]
+    public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
+    {
+        var user = await context.Users.FirstOrDefaultAsync(x => x.Username == loginDto.Username.ToLower());
 
+        if(user == null) return Unauthorized("User not found (invalid username)");
+
+        using var hmac = new HMACSHA512(user.PasswordSalt);
+
+        var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
+
+        for (int i = 0; i < computedHash.Length; i++)
+        {
+            if(computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid password");
+        }
+
+        return new UserDto
+        {
+            Username = user.Username,
+            Token = tokenService.CreateToken(user)
+        };
+    }
 
     private async Task<bool> Exists(string username)
     {

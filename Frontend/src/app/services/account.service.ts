@@ -7,11 +7,11 @@ import { inject, Injectable } from '@angular/core';
 export class AccountService {
 
   private http = inject(HttpClient);
-  baseURL = 'https://localhost:5271/api/';
+  baseURL = "http://localhost:5271/api/";
 
   login(model: any)
   {
-    return this.http.post(this.baseURL + 'account/users',model);
+    return this.http.post(this.baseURL + "account/login",model);
   }
 
 }
