@@ -26,3 +26,19 @@ export class NavBarComponent {
     })
   }
 }
+/*
+const loginFormContainer = document.querySelector(".loginForm-container"),
+loginFormLogin = document.getElementById("loginButton"),
+login = document.getElementById("login"),
+loginForm = document.querySelector(".login");
+
+function closeLoginFormContainer(){
+  loginFormContainer?.classList.remove("open");
+}*/
+function openForm(): void {
+  (document.getElementById("login") as HTMLElement).style.display = "block";
+}
+
+function closeForm(): void {
+  (document.getElementById("login") as HTMLElement).style.display = "none";
+}
